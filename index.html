@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ชาบูเฮีย - ระบบจัดการร้าน</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #0b0b0c;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="appFrame" allow="autoplay; camera; microphone"></iframe>
+
+  <script>
+    // URL Web App ของร้านคุณ
+    const BASE_URL = "https://script.google.com/macros/s/AKfycbynNg5wbR8JwHeumgDj44FDe7TCk0ESO3k5HJSRK0VNY5aRtCyEzTqUT9fATV-Vp9tm/exec";
+
+    // ดึง parameter ต่อท้าย เช่น ?page=admin หรือ ?table=1 มาส่งต่อให้อัตโนมัติ
+    const searchParams = window.location.search;
+    document.getElementById("appFrame").src = BASE_URL + searchParams;
+  </script>
+</body>
+</html>
