@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ชาบูเฮีย - ระบบจัดการร้าน</title>
+  <title>ระบบจัดการ</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
@@ -14,10 +14,22 @@
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       overflow: hidden;
     }
+    /* บนมือถือ แถบสีเทาของ Google ซ้อน 2 บรรทัดสูง 70px จึงต้องดันขึ้น -70px */
     iframe {
-      position: absolute; top: -48px; left: 0;
-      width: 100%; height: calc(100% + 48px);
-      border: none; display: block;
+      position: absolute;
+      top: -70px;
+      left: 0;
+      width: 100%;
+      height: calc(100% + 70px);
+      border: none;
+      display: block;
+    }
+    /* บนหน้าจอคอมพิวเตอร์ เป็นบรรทัดเดียว ดันขึ้น -55px */
+    @media (min-width: 768px) {
+      iframe {
+        top: -55px;
+        height: calc(100% + 55px);
+      }
     }
   </style>
 </head>
@@ -25,9 +37,20 @@
   <div class="frame-wrapper">
     <iframe id="appFrame" allow="autoplay; camera; microphone"></iframe>
   </div>
+
   <script>
-    const BASE_URL = "https://script.google.com/macros/s/AKfycbynNg5wbR8JwHeumgDj44FDe7TCk0ESO3k5HJSRK0VNY5aRtCyEzTqUT9fATV-Vp9tm/exec";
-    document.getElementById("appFrame").src = BASE_URL + window.location.search;
+    // 1. URL ร้านชาบูเฮีย
+    const SHABU_URL = "https://script.google.com/macros/s/AKfycbynNg5wbR8JwHeumgDj44FDe7TCk0ESO3k5HJSRK0VNY5aRtCyEzTqUT9fATV-Vp9tm/exec";
+    
+    // 2. URL ห้องเรียน Aaron Smart Classroom
+    const CLASS_URL = "https://script.google.com/macros/s/AKfycbwEJCEFJ5MU69n9R3MeHtQSYMGPRC2Gncma_G1DoFT9oco8uScv80vVXjOsuOuH4KaP/exec";
+
+    // ตรวจสอบว่ามี ?class อยู่ในลิงก์หรือไม่
+    const params = new URLSearchParams(window.location.search);
+    const isClass = params.has("class") || params.get("app") === "class";
+
+    document.title = isClass ? "Aaron Smart Classroom" : "ชาบูเฮีย - ระบบจัดการร้าน";
+    document.getElementById("appFrame").src = (isClass ? CLASS_URL : SHABU_URL) + window.location.search;
   </script>
 </body>
 </html>
