@@ -5,32 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ชาบูเฮีย - ระบบจัดการร้าน</title>
   <style>
+    * { box-sizing: border-box; }
     html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      overflow: hidden; background-color: #0b0b0c;
+    }
+    .frame-wrapper {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       overflow: hidden;
-      background-color: #0b0b0c;
     }
     iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
+      position: absolute; top: -48px; left: 0;
+      width: 100%; height: calc(100% + 48px);
+      border: none; display: block;
     }
   </style>
 </head>
 <body>
-  <iframe id="appFrame" allow="autoplay; camera; microphone"></iframe>
-
+  <div class="frame-wrapper">
+    <iframe id="appFrame" allow="autoplay; camera; microphone"></iframe>
+  </div>
   <script>
-    // URL Web App ของร้านคุณ
     const BASE_URL = "https://script.google.com/macros/s/AKfycbynNg5wbR8JwHeumgDj44FDe7TCk0ESO3k5HJSRK0VNY5aRtCyEzTqUT9fATV-Vp9tm/exec";
-
-    // ดึง parameter ต่อท้าย เช่น ?page=admin หรือ ?table=1 มาส่งต่อให้อัตโนมัติ
-    const searchParams = window.location.search;
-    document.getElementById("appFrame").src = BASE_URL + searchParams;
+    document.getElementById("appFrame").src = BASE_URL + window.location.search;
   </script>
 </body>
 </html>
