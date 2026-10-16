@@ -39,18 +39,35 @@
   </div>
 
   <script>
-    // 1. URL ร้านชาบูเฮีย
+    // 1. URL ร้านชาบู
     const SHABU_URL = "https://script.google.com/macros/s/AKfycbynNg5wbR8JwHeumgDj44FDe7TCk0ESO3k5HJSRK0VNY5aRtCyEzTqUT9fATV-Vp9tm/exec";
     
     // 2. URL ห้องเรียน Aaron Smart Classroom
     const CLASS_URL = "https://script.google.com/macros/s/AKfycbwEJCEFJ5MU69n9R3MeHtQSYMGPRC2Gncma_G1DoFT9oco8uScv80vVXjOsuOuH4KaP/exec";
 
-    // ตรวจสอบว่ามี ?class อยู่ในลิงก์หรือไม่
-    const params = new URLSearchParams(window.location.search);
-    const isClass = params.has("class") || params.get("app") === "class";
+    // 3. URL ห้องเรียน Dang Smart Classroom (คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล)
+    const DANG_URL = "https://script.google.com/macros/s/AKfycbwifzXPOLALRkmbJtmb-VY6vR-5pUuIBh1zIN_veZ6lmLJMsACB6g3rZjDOeK6cTWua/exec";
 
-    document.title = isClass ? "Aaron Smart Classroom" : "ชาบูเฮีย - ระบบจัดการร้าน";
-    document.getElementById("appFrame").src = (isClass ? CLASS_URL : SHABU_URL) + window.location.search;
+    // ตรวจสอบพารามิเตอร์ในลิงก์
+    const params = new URLSearchParams(window.location.search);
+    const appParam = (params.get("app") || "").toLowerCase();
+    const isDang = params.has("dang") || params.has("math") || appParam === "dang" || appParam === "math";
+    const isClass = params.has("class") || appParam === "class";
+
+    let targetUrl = SHABU_URL;
+    if (isDang) {
+      document.title = "SMART CLASSROOM 360° : คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล";
+      document.body.style.backgroundColor = "#001838";
+      targetUrl = DANG_URL;
+    } else if (isClass) {
+      document.title = "Aaron Smart Classroom";
+      targetUrl = CLASS_URL;
+    } else {
+      document.title = "ชาบู - ระบบจัดการร้าน";
+      targetUrl = SHABU_URL;
+    }
+
+    document.getElementById("appFrame").src = targetUrl + window.location.search;
   </script>
 </body>
 </html>
