@@ -2,40 +2,46 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#080f1d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
   <title>ระบบจัดการ</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0; width: 100%; height: 100%;
-      overflow: hidden; background-color: #0b0b0c;
+      overflow: hidden; background-color: #080f1d;
+      font-family: 'Kanit', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     .frame-wrapper {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       overflow: hidden;
     }
-    /* บนมือถือ แถบสีเทาของ Google ซ้อน 2 บรรทัดสูง 70px จึงต้องดันขึ้น -70px */
+    /* ปรับตำแหน่ง iframe ให้แสดงผลเต็มจอ ไม่ถูกตัดขอบบน และมองเห็นแถบแจ้งเตือนได้ชัดเจน */
     iframe {
       position: absolute;
-      top: -70px;
+      top: 0;
       left: 0;
       width: 100%;
-      height: calc(100% + 70px);
+      height: 100%;
       border: none;
       display: block;
     }
-    /* บนหน้าจอคอมพิวเตอร์ เป็นบรรทัดเดียว ดันขึ้น -55px */
     @media (min-width: 768px) {
       iframe {
-        top: -55px;
-        height: calc(100% + 55px);
+        top: 0;
+        height: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="frame-wrapper">
-    <iframe id="appFrame" allow="autoplay; camera; microphone"></iframe>
+  <div class="frame-wrapper" id="frameWrap">
+    <iframe id="appFrame" allow="autoplay; camera *; microphone *; clipboard-read; clipboard-write; display-capture"></iframe>
   </div>
 
   <script>
@@ -46,7 +52,7 @@
     const CLASS_URL = "https://script.google.com/macros/s/AKfycbwEJCEFJ5MU69n9R3MeHtQSYMGPRC2Gncma_G1DoFT9oco8uScv80vVXjOsuOuH4KaP/exec";
 
     // 3. URL ห้องเรียน Dang Smart Classroom (คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล)
-    const DANG_URL = "https://script.google.com/macros/s/AKfycbwifzXPOLALRkmbJtmb-VY6vR-5pUuIBh1zIN_veZ6lmLJMsACB6g3rZjDOeK6cTWua/exec";
+    const DANG_URL = "https://script.google.com/macros/s/AKfycbzBR6_q49HMH7SnmhpipeTuWOa_8ddW0Q_tcuAFT2QqTr-ls6ljqTLvC92z8lVMydi1/exec";
 
     // ตรวจสอบพารามิเตอร์ในลิงก์
     const params = new URLSearchParams(window.location.search);
@@ -54,20 +60,69 @@
     const isDang = params.has("dang") || params.has("math") || appParam === "dang" || appParam === "math";
     const isClass = params.has("class") || appParam === "class";
 
-    let targetUrl = SHABU_URL;
-    if (isDang) {
-      document.title = "SMART CLASSROOM 360° : คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล";
-      document.body.style.backgroundColor = "#001838";
-      targetUrl = DANG_URL;
-    } else if (isClass) {
-      document.title = "Aaron Smart Classroom";
-      targetUrl = CLASS_URL;
-    } else {
-      document.title = "ชาบู - ระบบจัดการร้าน";
-      targetUrl = SHABU_URL;
+    function bootStandaloneShell(targetUrl, shellKey, expectedMarker) {
+      function writeShell(htmlStr) {
+        document.open();
+        document.write(htmlStr);
+        document.close();
+      }
+
+      function fetchAndCacheShell(isBackground) {
+        fetch(targetUrl + "?action=standalone_html", { redirect: "follow" })
+          .then(r => r.json())
+          .then(res => {
+            if (res && res.status === "SUCCESS" && res.html) {
+              try { localStorage.setItem(shellKey, res.html); } catch (e) {}
+              if (!isBackground) {
+                writeShell(res.html);
+              }
+            } else if (!isBackground) {
+              document.getElementById("appFrame").src = targetUrl + window.location.search;
+            }
+          })
+          .catch(() => {
+            if (!isBackground) {
+              document.getElementById("appFrame").src = targetUrl + window.location.search;
+            }
+          });
+      }
+
+      let cachedShell = null;
+      try { cachedShell = localStorage.getItem(shellKey); } catch (e) {}
+
+      if (cachedShell && cachedShell.includes(expectedMarker)) {
+        // เปิดขึ้นหน้าจอทันทีใน 0.01 วินาทีโดยไม่ต้องรอโหลดจาก Google!
+        setTimeout(() => fetchAndCacheShell(true), 1500);
+        writeShell(cachedShell);
+      } else {
+        fetchAndCacheShell(false);
+      }
     }
 
-    document.getElementById("appFrame").src = targetUrl + window.location.search;
+    if (isDang && !params.has("iframe")) {
+      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับ Dang Smart Classroom 360°
+      document.title = "SMART CLASSROOM 360° : คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล";
+      document.body.style.backgroundColor = "#001838";
+      bootStandaloneShell(DANG_URL, "dang_standalone_shell_v1", "DANG SMART CLASSROOM");
+    } else if (isClass && !params.has("iframe")) {
+      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับ Aaron Smart Classroom
+      document.title = "Aaron Smart Classroom";
+      bootStandaloneShell(CLASS_URL, "aaron_standalone_shell_v1", "AARON SMART CLASSROOM");
+    } else {
+      let targetUrl = SHABU_URL;
+      if (isDang) {
+        document.title = "SMART CLASSROOM 360° : คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล";
+        document.body.style.backgroundColor = "#001838";
+        targetUrl = DANG_URL;
+      } else if (isClass) {
+        document.title = "Aaron Smart Classroom";
+        targetUrl = CLASS_URL;
+      } else {
+        document.title = "ชาบู - ระบบจัดการร้าน";
+        targetUrl = SHABU_URL;
+      }
+      document.getElementById("appFrame").src = targetUrl + window.location.search;
+    }
   </script>
 </body>
 </html>
