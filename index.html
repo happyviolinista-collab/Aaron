@@ -60,21 +60,37 @@
     // 1. URL ร้านชาบู
     const SHABU_URL = "https://script.google.com/macros/s/AKfycbynNg5wbR8JwHeumgDj44FDe7TCk0ESO3k5HJSRK0VNY5aRtCyEzTqUT9fATV-Vp9tm/exec";
     
-    // 2. URL ห้องเรียนสังคมศึกษา คุณครูพิชามญ คงมีผล (โรงเรียนบ้านหุบกระทิง จ.ราชบุรี)
-    const CLASS_URL = "https://script.google.com/macros/s/AKfycbwQscZsFfHLByOeRMV4b3EhkaE0a5TUH7AKGoK_U_C9mQn_51cf-pXAI3whcEmC3E_q/exec";
+    // 2. URL ห้องเรียน Aaron Smart Classroom (English & Japanese - แยกเฉพาะของ Aaron)
+    const AARON_URL = "https://script.google.com/macros/s/AKfycbyHp3DEmTj5St_X-OgvhRzP2sEfQx58dtFuV-cLBQYkJkegpZ37pozLtzzF59so1DqF/exec";
 
-    // 3. URL ห้องเรียน Dang Smart Classroom (คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล)
+    // 3. URL ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล (โรงเรียนบ้านหุบกระทิง จ.ราชบุรี - แยกเฉพาะของครูพิชามญ)
+    const PICHAMON_URL = "https://script.google.com/macros/s/AKfycbwQscZsFfHLByOeRMV4b3EhkaE0a5TUH7AKGoK_U_C9mQn_51cf-pXAI3whcEmC3E_q/exec";
+
+    // 4. URL ห้องเรียน Dang Smart Classroom (คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล)
     const DANG_URL = "https://script.google.com/macros/s/AKfycbzBR6_q49HMH7SnmhpipeTuWOa_8ddW0Q_tcuAFT2QqTr-ls6ljqTLvC92z8lVMydi1/exec";
 
-    // 4. URL ระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4 (Quick and Easy Exam)
+    // 5. URL ระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4 (Quick and Easy Exam)
     const EXAM_URL = "https://script.google.com/macros/s/AKfycbygta_D0T2FB7_cWZTIcwjpvrFftBBhZiz8WJ9lnT-F-bILz3-DhG3gHTNqOy1_iP3dmw/exec";
 
-    // ตรวจสอบพารามิเตอร์ในลิงก์
-    const params = new URLSearchParams(window.location.search);
-    const appParam = (params.get("app") || "").toLowerCase();
-    const isExam = params.has("exam") || params.has("quiz") || params.has("test") || appParam === "exam" || appParam === "quiz";
-    const isDang = params.has("dang") || params.has("math") || appParam === "dang" || appParam === "math";
-    const isClass = params.has("class") || params.has("sid") || params.has("social") || params.has("pichamon") || appParam === "class" || appParam === "social";
+    // ฟังก์ชันแยกเส้นทาง (Generated via Local AI Builder - Qwen 2.5 Coder 3B)
+    function getRouteFlags(searchStr) {
+      const params = new URLSearchParams(searchStr);
+      const app = (params.get("app") || "").toLowerCase();
+      const examKeywords = ["exam", "quiz", "test"];
+      const dangKeywords = ["dang", "math"];
+      const pichamonKeywords = ["social", "pichamon", "cafe"];
+      const aaronKeywords = ["class", "aaron", "sid"];
+
+      return {
+        params,
+        isExam: examKeywords.some(k => params.has(k)) || examKeywords.includes(app),
+        isDang: dangKeywords.some(k => params.has(k)) || dangKeywords.includes(app),
+        isPichamon: pichamonKeywords.some(k => params.has(k)) || pichamonKeywords.includes(app),
+        isAaron: aaronKeywords.some(k => params.has(k)) || aaronKeywords.includes(app)
+      };
+    }
+
+    const { params, isExam, isDang, isPichamon, isAaron } = getRouteFlags(window.location.search);
 
     function bootStandaloneShell(targetUrl, shellKey, expectedMarker, dataKey) {
       function writeShell(htmlStr) {
@@ -121,7 +137,6 @@
       try { cachedShell = localStorage.getItem(shellKey); } catch (e) {}
 
       if (cachedShell && cachedShell.includes(expectedMarker)) {
-        // เปิดขึ้นหน้าจอทันทีใน 0.01 วินาทีโดยไม่ต้องรอโหลดจาก Google!
         setTimeout(() => fetchAndCacheShell(true), 1200);
         writeShell(cachedShell);
       } else {
@@ -130,24 +145,25 @@
     }
 
     if (isExam && !params.has("iframe")) {
-      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4
+      // ⚡ โหมด Standalone สำหรับระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4
       document.title = "ระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4";
       document.body.style.backgroundColor = "#f0f4f9";
       bootStandaloneShell(EXAM_URL, "exam_standalone_shell_v1", "QUICK AND EASY EXAM SYSTEM", "exam_appdata_swr_v1");
     } else if (isDang && !params.has("iframe")) {
-      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับ Dang Smart Classroom 360°
+      // ⚡ โหมด Standalone สำหรับ Dang Smart Classroom 360°
       document.title = "SMART CLASSROOM 360° : คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล";
       document.body.style.backgroundColor = "#001838";
       bootStandaloneShell(DANG_URL, "dang_standalone_shell_v1", "DANG SMART CLASSROOM");
-    } else if (isClass && !params.has("iframe")) {
-      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับ ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล
+    } else if (isPichamon && !params.has("iframe")) {
+      // ⚡ โหมด Standalone สำหรับ ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล (?social=1 หรือ ?pichamon=1)
       document.title = "🍵 ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล 🌸 โรงเรียนบ้านหุบกระทิง จ.ราชบุรี";
       document.body.style.backgroundColor = "#fff9f5";
-      try {
-        localStorage.removeItem("aaron_standalone_shell_v1");
-        localStorage.removeItem("pichamon_social_shell_v2");
-      } catch (e) {}
-      bootStandaloneShell(CLASS_URL, "pichamon_cafe_shell_v3", "คุณครูพิชามญ คงมีผล");
+      bootStandaloneShell(PICHAMON_URL, "pichamon_cafe_shell_v3", "คุณครูพิชามญ คงมีผล");
+    } else if (isAaron && !params.has("iframe")) {
+      // ⚡ โหมด Standalone สำหรับ Aaron Smart Classroom (?class=1 หรือ ?aaron=1)
+      document.title = "Aaron Smart Classroom — English & Japanese";
+      document.body.style.backgroundColor = "#f8fafc";
+      bootStandaloneShell(AARON_URL, "aaron_standalone_shell_v2", "Aaron Smart Classroom");
     } else {
       let targetUrl = SHABU_URL;
       const frame = document.getElementById("appFrame");
@@ -160,10 +176,13 @@
         document.title = "SMART CLASSROOM 360° : คณิตคิดสนุก ป.6 - ครูกมลพงษ์ วารีบาล";
         document.body.style.backgroundColor = "#001838";
         targetUrl = DANG_URL;
-      } else if (isClass) {
+      } else if (isPichamon) {
         document.title = "🍵 ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล 🌸 โรงเรียนบ้านหุบกระทิง จ.ราชบุรี";
         document.body.style.backgroundColor = "#fff9f5";
-        targetUrl = CLASS_URL;
+        targetUrl = PICHAMON_URL;
+      } else if (isAaron) {
+        document.title = "Aaron Smart Classroom — English & Japanese";
+        targetUrl = AARON_URL;
       } else {
         document.title = "ชาบู - ระบบจัดการร้าน";
         targetUrl = SHABU_URL;
