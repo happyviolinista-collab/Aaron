@@ -161,9 +161,13 @@
       bootStandaloneShell(PICHAMON_URL, "pichamon_cafe_shell_v3", "คุณครูพิชามญ คงมีผล");
     } else if (isAaron && !params.has("iframe")) {
       // ⚡ โหมด Standalone สำหรับ Aaron Smart Classroom (?class=1 หรือ ?aaron=1)
-      document.title = "Aaron Smart Classroom — English & Japanese";
-      document.body.style.backgroundColor = "#f8fafc";
-      bootStandaloneShell(AARON_URL, "aaron_standalone_shell_v2", "Aaron Smart Classroom");
+      document.title = "🇬🇧🇯🇵 Aaron Smart Classroom — Tokyo–London Language Arcade";
+      document.body.style.backgroundColor = "#f0f7ff";
+      try {
+        localStorage.removeItem("aaron_standalone_shell_v1");
+        localStorage.removeItem("aaron_standalone_shell_v2");
+      } catch (e) {}
+      bootStandaloneShell(AARON_URL, "aaron_neopop_shell_v3", "NEO-POP LANGUAGE ARCADE");
     } else {
       let targetUrl = SHABU_URL;
       const frame = document.getElementById("appFrame");
