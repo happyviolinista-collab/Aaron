@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <meta name="theme-color" content="#4f46e5">
+  <meta name="theme-color" content="#06b6d4">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
@@ -12,13 +12,13 @@
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <title>Aaron Smart Classroom — English & Japanese</title>
+  <title>🇬🇧🇯🇵 Aaron Smart Classroom — Tokyo–London Language Arcade</title>
   <style>
     * { box-sizing: border-box; }
     html, body {
       margin: 0; padding: 0; width: 100%; height: 100%;
-      background-color: #f8fafc;
-      font-family: 'Kanit', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f0f7ff;
+      font-family: 'Chakra Petch', 'Fredoka', 'Noto Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif;
       overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -58,6 +58,11 @@
   <script>
     const AARON_URL = "https://script.google.com/macros/s/AKfycbyHp3DEmTj5St_X-OgvhRzP2sEfQx58dtFuV-cLBQYkJkegpZ37pozLtzzF59so1DqF/exec";
 
+    try {
+      localStorage.removeItem("aaron_standalone_shell_v1");
+      localStorage.removeItem("aaron_standalone_shell_v2");
+    } catch (e) {}
+
     function bootStandaloneShell(targetUrl, shellKey, expectedMarker) {
       function writeShell(htmlStr) {
         document.open();
@@ -96,7 +101,7 @@
       }
     }
 
-    bootStandaloneShell(AARON_URL, "aaron_standalone_shell_v2", "Aaron Smart Classroom");
+    bootStandaloneShell(AARON_URL, "aaron_neopop_shell_v3", "NEO-POP LANGUAGE ARCADE");
   </script>
 </body>
 </html>
