@@ -72,10 +72,14 @@
     // 5. URL ระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4 (Quick and Easy Exam)
     const EXAM_URL = "https://script.google.com/macros/s/AKfycbygta_D0T2FB7_cWZTIcwjpvrFftBBhZiz8WJ9lnT-F-bILz3-DhG3gHTNqOy1_iP3dmw/exec";
 
+    // 6. URL ระบบบริหารจัดการสถานศึกษาดิจิทัลไร้ต้นทุน (School ERP Enterprise 2569)
+    const ERP_URL = "https://script.google.com/macros/s/AKfycbybJSlccZExasgBc248eU_CYXdGKGIUxgelowhLTepj82In1izUQMIePKLY3Mpa1xLFRA/exec";
+
     // ฟังก์ชันแยกเส้นทาง (Generated via Local AI Builder - Qwen 2.5 Coder 3B)
     function getRouteFlags(searchStr) {
       const params = new URLSearchParams(searchStr);
       const app = (params.get("app") || "").toLowerCase();
+      const erpKeywords = ["erp", "school", "office", "sarabun"];
       const examKeywords = ["exam", "quiz", "test"];
       const dangKeywords = ["dang", "math"];
       const pichamonKeywords = ["social", "pichamon", "cafe"];
@@ -83,6 +87,7 @@
 
       return {
         params,
+        isErp: erpKeywords.some(k => params.has(k)) || erpKeywords.includes(app),
         isExam: examKeywords.some(k => params.has(k)) || examKeywords.includes(app),
         isDang: dangKeywords.some(k => params.has(k)) || dangKeywords.includes(app),
         isPichamon: pichamonKeywords.some(k => params.has(k)) || pichamonKeywords.includes(app),
@@ -90,7 +95,7 @@
       };
     }
 
-    const { params, isExam, isDang, isPichamon, isAaron } = getRouteFlags(window.location.search);
+    const { params, isErp, isExam, isDang, isPichamon, isAaron } = getRouteFlags(window.location.search);
 
     function bootStandaloneShell(targetUrl, shellKey, expectedMarker, dataKey) {
       function writeShell(htmlStr) {
@@ -144,7 +149,12 @@
       }
     }
 
-    if (isExam && !params.has("iframe")) {
+    if (isErp && !params.has("iframe")) {
+      // ⚡ โหมด Standalone สำหรับ School ERP Enterprise 2569 (?erp=1 หรือ ?school=1)
+      document.title = "School ERP Enterprise 2569 — ระบบบริหารจัดการสถานศึกษาดิจิทัลไร้ต้นทุน";
+      document.body.style.backgroundColor = "#f8fafc";
+      bootStandaloneShell(ERP_URL, "school_erp_standalone_shell_v1", "SCHOOL ERP ENTERPRISE SYSTEM", "school_erp_swr_cache_v1");
+    } else if (isExam && !params.has("iframe")) {
       // ⚡ โหมด Standalone สำหรับระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4
       document.title = "ระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4";
       document.body.style.backgroundColor = "#f0f4f9";
@@ -171,7 +181,12 @@
     } else {
       let targetUrl = SHABU_URL;
       const frame = document.getElementById("appFrame");
-      if (isExam) {
+      if (isErp) {
+        document.title = "School ERP Enterprise 2569 — ระบบบริหารจัดการสถานศึกษาดิจิทัลไร้ต้นทุน";
+        document.body.style.backgroundColor = "#f8fafc";
+        if (frame) frame.classList.add("crop-gas-bar");
+        targetUrl = ERP_URL;
+      } else if (isExam) {
         document.title = "ระบบสอบออนไลน์ & จัดพิมพ์ข้อสอบมาตรฐาน F4";
         document.body.style.backgroundColor = "#f0f4f9";
         if (frame) frame.classList.add("crop-gas-bar");
