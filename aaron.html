@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="preconnect" href="https://script.google.com" crossorigin>
+  <link rel="preconnect" href="https://script.googleusercontent.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Aaron Smart Classroom — English & Japanese</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      background-color: #f8fafc;
+      font-family: 'Kanit', 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .frame-wrapper {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+    iframe.crop-gas-bar {
+      top: -68px;
+      height: calc(100% + 68px);
+    }
+    @media (min-width: 768px) {
+      iframe.crop-gas-bar {
+        top: -54px;
+        height: calc(100% + 54px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame-wrapper" id="frameWrap">
+    <iframe id="appFrame" allow="autoplay; camera *; microphone *; clipboard-read; clipboard-write; display-capture"></iframe>
+  </div>
+
+  <script>
+    const AARON_URL = "https://script.google.com/macros/s/AKfycbyHp3DEmTj5St_X-OgvhRzP2sEfQx58dtFuV-cLBQYkJkegpZ37pozLtzzF59so1DqF/exec";
+
+    function bootStandaloneShell(targetUrl, shellKey, expectedMarker) {
+      function writeShell(htmlStr) {
+        document.open();
+        document.write(htmlStr);
+        document.close();
+      }
+      function fallbackToIframe() {
+        const frame = document.getElementById("appFrame");
+        if (frame) {
+          frame.classList.add("crop-gas-bar");
+          frame.src = targetUrl + window.location.search;
+        }
+      }
+      function fetchAndCacheShell(isBackground) {
+        fetch(targetUrl + "?action=standalone_html", { redirect: "follow" })
+          .then(r => r.json())
+          .then(res => {
+            if (res && res.status === "SUCCESS" && res.html) {
+              try { localStorage.setItem(shellKey, res.html); } catch (e) {}
+              if (!isBackground) writeShell(res.html);
+            } else if (!isBackground) {
+              fallbackToIframe();
+            }
+          })
+          .catch(() => {
+            if (!isBackground) fallbackToIframe();
+          });
+      }
+      let cachedShell = null;
+      try { cachedShell = localStorage.getItem(shellKey); } catch (e) {}
+      if (cachedShell && cachedShell.includes(expectedMarker)) {
+        setTimeout(() => fetchAndCacheShell(true), 1200);
+        writeShell(cachedShell);
+      } else {
+        fetchAndCacheShell(false);
+      }
+    }
+
+    bootStandaloneShell(AARON_URL, "aaron_standalone_shell_v2", "Aaron Smart Classroom");
+  </script>
+</body>
+</html>
