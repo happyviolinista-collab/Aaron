@@ -140,11 +140,14 @@
       document.body.style.backgroundColor = "#001838";
       bootStandaloneShell(DANG_URL, "dang_standalone_shell_v1", "DANG SMART CLASSROOM");
     } else if (isClass && !params.has("iframe")) {
-      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับ ห้องเรียนสังคมศึกษา คุณครูพิชามญ คงมีผล
-      document.title = "ห้องเรียนสังคมศึกษา คุณครูพิชามญ คงมีผล — โรงเรียนบ้านหุบกระทิง จ.ราชบุรี";
-      document.body.style.backgroundColor = "#fdfbf7";
-      try { localStorage.removeItem("aaron_standalone_shell_v1"); } catch (e) {}
-      bootStandaloneShell(CLASS_URL, "pichamon_social_shell_v2", "คุณครูพิชามญ คงมีผล");
+      // ⚡ โหมด Standalone Zero-Iframe ความเร็วสูงสำหรับ ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล
+      document.title = "🍵 ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล 🌸 โรงเรียนบ้านหุบกระทิง จ.ราชบุรี";
+      document.body.style.backgroundColor = "#fff9f5";
+      try {
+        localStorage.removeItem("aaron_standalone_shell_v1");
+        localStorage.removeItem("pichamon_social_shell_v2");
+      } catch (e) {}
+      bootStandaloneShell(CLASS_URL, "pichamon_cafe_shell_v3", "คุณครูพิชามญ คงมีผล");
     } else {
       let targetUrl = SHABU_URL;
       const frame = document.getElementById("appFrame");
@@ -158,8 +161,8 @@
         document.body.style.backgroundColor = "#001838";
         targetUrl = DANG_URL;
       } else if (isClass) {
-        document.title = "ห้องเรียนสังคมศึกษา คุณครูพิชามญ คงมีผล — โรงเรียนบ้านหุบกระทิง จ.ราชบุรี";
-        document.body.style.backgroundColor = "#fdfbf7";
+        document.title = "🍵 ห้องเรียนสังคมคาเฟ่ คุณครูพิชามญ คงมีผล 🌸 โรงเรียนบ้านหุบกระทิง จ.ราชบุรี";
+        document.body.style.backgroundColor = "#fff9f5";
         targetUrl = CLASS_URL;
       } else {
         document.title = "ชาบู - ระบบจัดการร้าน";
