@@ -33,24 +33,22 @@
   </script>
   <style>
     /* ============================================================================
-       1. DESIGN SYSTEM TOKENS & 60-30-10 COLOR RULE (modern-web-ui + dark-mode)
+       1. DESIGN SYSTEM TOKENS & CLEAN THAI TYPOGRAPHY SYSTEM (Prompt + Sarabun)
        ============================================================================ */
     :root {
       color-scheme: light dark;
       /* 60% Dominant Background */
-      --bg-dominant: #f4f7fb;
-      --bg-canvas-accent: rgba(37, 99, 235, 0.06);
-      /* 30% Secondary Surface (Glass & Cards) */
-      --bg-surface: rgba(255, 255, 255, 0.86);
+      --bg-dominant: #f6f8fc;
+      --bg-surface: rgba(255, 255, 255, 0.92);
       --bg-surface-solid: #ffffff;
-      --bg-surface-muted: #f8fafc;
-      --border-subtle: rgba(148, 163, 184, 0.22);
-      --border-strong: rgba(148, 163, 184, 0.38);
+      --bg-surface-muted: #f1f5f9;
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
       /* Text Hierarchy */
       --text-primary: #0f172a;
       --text-secondary: #475569;
       --text-muted: #64748b;
-      /* 10% Brand & Semantic Accents */
+      /* Brand Accents */
       --color-primary: #2563eb;
       --color-indigo: #4f46e5;
       --color-emerald: #10b981;
@@ -61,12 +59,11 @@
 
     html.dark {
       --bg-dominant: #090d16;
-      --bg-canvas-accent: rgba(79, 70, 229, 0.12);
-      --bg-surface: rgba(17, 24, 39, 0.82);
+      --bg-surface: rgba(17, 24, 39, 0.88);
       --bg-surface-solid: #111827;
       --bg-surface-muted: #1e293b;
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --border-strong: rgba(255, 255, 255, 0.16);
+      --border-subtle: #1e293b;
+      --border-strong: #334155;
       --text-primary: #f8fafc;
       --text-secondary: #cbd5e1;
       --text-muted: #94a3b8;
@@ -78,96 +75,118 @@
     }
 
     body {
-      font-family: 'Prompt', 'Plus Jakarta Sans', 'Inter', sans-serif;
+      font-family: 'Prompt', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--bg-dominant);
       background-image:
-        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.08) 0px, transparent 45%),
-        radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.08) 0px, transparent 45%),
-        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%);
       background-attachment: fixed;
       color: var(--text-primary);
       margin: 0;
       padding: 0;
       min-block-size: 100dvh;
       overflow-x: hidden;
-      line-height: 1.55;
+      font-size: 15px;
+      line-height: 1.7;
+      letter-spacing: 0;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      line-break: normal;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Typography Scale (modern-web-ui) */
-    .heading-xl {
-      font-size: clamp(1.35rem, 1.1rem + 1vw, 1.85rem);
-      font-weight: 700;
-      line-height: 1.25;
-      letter-spacing: -0.02em;
+    /* Clean Heading Hierarchy */
+    h1, h2, h3, h4, .heading-text {
+      font-family: 'Prompt', sans-serif;
+      line-height: 1.45;
+      letter-spacing: 0;
+      word-break: break-word;
     }
-    .heading-lg {
-      font-size: clamp(1.1rem, 1rem + 0.4vw, 1.35rem);
+    .heading-hero {
+      font-size: clamp(1.4rem, 1.2rem + 1vw, 2rem);
       font-weight: 700;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
+      line-height: 1.35;
+    }
+    .heading-section {
+      font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.45rem);
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .heading-card {
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+    .body-text {
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+    }
+    .caption-text {
+      font-size: 0.8125rem;
+      line-height: 1.6;
+      color: var(--text-muted);
     }
     .kpi-value {
-      font-family: 'Outfit', 'Plus Jakarta Sans', 'Prompt', sans-serif;
+      font-family: 'Outfit', 'Prompt', sans-serif;
       font-variant-numeric: tabular-nums;
-      letter-spacing: -0.03em;
+      letter-spacing: 0;
     }
 
-    /* ============================================================================
-       2. GLASSMORPHISM, BENTO SURFACES & MICRO-INTERACTIONS (modern-web-ui)
-       ============================================================================ */
+    /* Clean Surfaces & Bento Cards */
     .glass-panel {
       background: var(--bg-surface);
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid var(--border-subtle);
-      box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.05), inset 0 1px 0 0 rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
     }
     html.dark .glass-panel {
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+      box-shadow: 0 6px 24px -3px rgba(0, 0, 0, 0.4);
     }
 
     .bento-card {
       background: var(--bg-surface-solid);
       border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04), 0 1px 3px 0 rgba(15, 23, 42, 0.02);
-      transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
+      border-radius: 18px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 12px -1px rgba(15, 23, 42, 0.03), 0 1px 3px 0 rgba(15, 23, 42, 0.02);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
     html.dark .bento-card {
-      background: rgba(17, 24, 39, 0.9);
-      box-shadow: 0 8px 28px -4px rgba(0, 0, 0, 0.4);
+      background: rgba(17, 24, 39, 0.95);
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.35);
     }
     .bento-card-interactive:hover {
-      transform: translateY(-3px);
+      transform: translateY(-2px);
       border-color: rgba(59, 130, 246, 0.4);
-      box-shadow: 0 16px 32px -6px rgba(37, 99, 235, 0.12);
+      box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.1);
     }
 
-    /* Click feedback (Depress effect from modern-web-ui) */
+    /* Interactive Buttons */
     .btn-interactive {
-      transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
     }
     .btn-interactive:hover {
-      transform: translateY(-1.5px);
+      transform: translateY(-1px);
     }
     .btn-interactive:active {
-      transform: scale(0.97) translateY(0);
+      transform: scale(0.98);
     }
 
-    /* Sidebar Navigation States (.is-active state class) */
+    /* Sidebar Navigation Item */
     .nav-item {
       display: flex;
-      align-items: safe center;
-      gap: 0.75rem;
+      align-items: center;
+      gap: 0.85rem;
       width: 100%;
-      padding: 0.7rem 0.9rem;
-      border-radius: 14px;
-      font-size: 0.84rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      font-size: 0.9rem;
       font-weight: 500;
       color: var(--text-secondary);
-      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
+      transition: all 0.18s ease;
+      line-height: 1.5;
       text-align: left;
     }
     .nav-item:hover {
@@ -178,58 +197,14 @@
       background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
       color: #ffffff;
       font-weight: 600;
-      box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.45);
+      box-shadow: 0 6px 16px -2px rgba(37, 99, 235, 0.35);
     }
     .nav-item.is-active .nav-badge {
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.25);
       color: #ffffff;
     }
 
-    /* Skeleton Loading Screen (Shimmer from modern-web-ui) */
-    .skeleton {
-      background: #e2e8f0;
-      background-image: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.55) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
-      border-radius: 10px;
-    }
-    html.dark .skeleton {
-      background: #1e293b;
-      background-image: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        rgba(255, 255, 255, 0.08) 50%,
-        rgba(255, 255, 255, 0) 100%
-      );
-    }
-    @keyframes shimmer {
-      0% { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-
-    /* ============================================================================
-       3. MODERN WEB GUIDANCE PATTERNS (css-layout, responsive-table, INP)
-       ============================================================================ */
-    .erp-module-section {
-      display: none;
-      content-visibility: auto;
-      contain-intrinsic-size: auto 600px;
-    }
-    .erp-module-section.is-visible {
-      display: block;
-    }
-    @supports not (content-visibility: auto) {
-      .erp-module-section {
-        contain: layout style paint;
-      }
-    }
-
-    /* Responsive Data Table with Container Queries & Sticky Headers */
+    /* Responsive Data Tables with Clean Padding */
     .table-wrapper {
       overflow: auto;
       max-inline-size: 100%;
@@ -243,11 +218,22 @@
       border-collapse: separate;
       border-spacing: 0;
       inline-size: 100%;
+      font-size: 0.875rem;
+      line-height: 1.6;
     }
-    .table-wrapper thead {
+    .table-wrapper thead th {
       position: sticky;
       inset-block-start: 0;
       z-index: 10;
+      padding: 0.85rem 1rem;
+      font-weight: 600;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+    .table-wrapper tbody td,
+    .table-wrapper tbody th {
+      padding: 0.85rem 1rem;
+      vertical-align: middle;
     }
     .table-wrapper tbody th {
       position: sticky;
@@ -255,15 +241,7 @@
       z-index: 5;
     }
 
-    /* Flexbox tag list with flex-wrap: balance progressive enhancement */
-    .tag-cloud {
-      display: flex;
-      flex-wrap: wrap;
-      flex-wrap: balance;
-      gap: 0.375rem;
-    }
-
-    /* Official Garuda Memo Paper Preview */
+    /* Official Garuda Paper */
     .kruda-memo-paper {
       font-family: 'Sarabun', serif;
       background: #ffffff;
@@ -271,17 +249,12 @@
       max-inline-size: 794px;
       margin-inline: auto;
       padding: 48px 56px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
       border: 1px solid #cbd5e1;
-      line-height: 1.65;
+      line-height: 1.75;
+      font-size: 16px;
     }
 
-    @media print {
-      body * { visibility: hidden; }
-      #pdfPreviewModal, #pdfPreviewModal * { visibility: visible; }
-      #pdfPreviewModal { position: absolute; inset-inline-start: 0; inset-block-start: 0; inline-size: 100%; background: #fff !important; }
-      .no-print { display: none !important; }
-    }
   </style>
 </head>
 <body class="text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
@@ -418,12 +391,12 @@
               <i data-lucide="menu" class="w-5 h-5"></i>
             </button>
             <div class="min-w-0">
-              <div class="flex items-center gap-2 text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              <div class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
                 <span>โรงเรียนเตรียมอุดมศึกษาพัฒนาการปราณบุรี</span>
                 <span>•</span>
-                <span id="headerBreadcrumb" class="text-blue-600 dark:text-blue-400 font-bold">Executive Command Center</span>
+                <span id="headerBreadcrumb" class="text-blue-600 dark:text-blue-400 font-semibold">Executive Command Center</span>
               </div>
-              <h1 id="headerModuleTitle" class="text-base lg:text-lg font-extrabold text-slate-900 dark:text-white truncate">
+              <h1 id="headerModuleTitle" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white mt-0.5">
                 ภาพรวมผู้บริหารและดัชนีชี้วัดคุณภาพสถานศึกษา (Executive Bento)
               </h1>
             </div>
@@ -471,34 +444,35 @@
 
             <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
               <div class="space-y-3 max-w-2xl">
-                <div class="inline-flex flex-wrap items-center gap-2">
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-300/30 text-amber-300 text-xs font-bold">
+                <div class="inline-flex items-center gap-2">
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-300/30 text-amber-300 text-xs font-semibold">
                     <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> ปีการศึกษา 2569 • ภาคเรียนที่ 1
                   </span>
                   <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400/15 border border-emerald-300/30 text-emerald-300 text-xs font-semibold">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Zero-Cost Google Cloud Architecture
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Zero-Cost Cloud Architecture
                   </span>
                 </div>
-                <h2 class="heading-xl text-white">
-                  ศูนย์บัญชาการบริหารสถานศึกษาดิจิทัล <span class="text-amber-300">อัตโนมัติครบวงจร</span>
+                <h2 class="heading-hero text-white">
+                  ระบบบริหารจัดการสถานศึกษาดิจิทัลอัจฉริยะ
                 </h2>
-                <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                  เชื่อมโยงข้อมูลไร้รอยต่อทั้ง 5 กลุ่มงานหลัก ลดภาระงานเอกสารซ้ำซ้อนของครูผู้สอน พร้อมจัดเก็บหลักฐานการประเมินภายนอก (สมศ.) และวิทยฐานะดิจิทัล (วPA) อัตโนมัติ 100%
+                <p class="body-text text-slate-200">
+                  ศูนย์กลางบูรณาการ 5 กลุ่มงานหลักของสถานศึกษา ลดความซ้ำซ้อนของงานเอกสาร พร้อมจัดเก็บหลักฐานการประกันคุณภาพการศึกษา (สมศ.) และวิทยฐานะดิจิทัล (วPA) อัตโนมัติ 100%
                 </p>
-                <div class="pt-1 flex flex-wrap items-center gap-2.5">
-                  <button onclick="switchErpTab('eoffice')" class="btn-interactive px-4 py-2.5 rounded-xl bg-white text-slate-950 font-bold text-xs shadow-lg flex items-center gap-2">
+                <div class="pt-2 flex flex-wrap items-center gap-3">
+                  <button onclick="switchErpTab('eoffice')" class="btn-interactive px-4 py-2.5 rounded-xl bg-white text-slate-900 font-semibold text-sm shadow-md flex items-center gap-2">
                     <i data-lucide="pen-tool" class="w-4 h-4 text-blue-600"></i> แฟ้มรอลงนามดิจิทัล
                   </button>
-                  <button onclick="switchErpTab('vault')" class="btn-interactive px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-bold text-xs shadow-lg flex items-center gap-2">
+                  <button onclick="switchErpTab('vault')" class="btn-interactive px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-sm shadow-md flex items-center gap-2">
                     <i data-lucide="folder-kanban" class="w-4 h-4"></i> คลังหลักฐาน สมศ. / วPA
                   </button>
-                  <button onclick="triggerInitSpreadsheets()" id="btnProvisionDb" class="btn-interactive px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-xs flex items-center gap-2">
-                    <i data-lucide="database-zap" class="w-4 h-4 text-emerald-300"></i> ซิงค์ฐานข้อมูล Google Sheets
+                  <button onclick="triggerInitSpreadsheets()" id="btnProvisionDb" class="btn-interactive px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 font-semibold text-sm flex items-center gap-2">
+                    <i data-lucide="database-zap" class="w-4 h-4 text-emerald-300"></i> ซิงค์ตาราง Google Sheets
                   </button>
                 </div>
               </div>
+            </div>
 
-              <!-- Lottie Vector Illustration & Executive Readiness Score -->
+            <!-- Lottie Vector Illustration & Executive Readiness Score -->
               <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-4 shrink-0">
                 <dotlottie-player
                   src="https://lottie.host/4f98103c-e6bf-4638-a29d-ee186988c5ef/vK8nJ7aW8b.json"
@@ -526,7 +500,7 @@
             <div onclick="switchErpTab('eoffice')" class="bento-card bento-card-interactive p-5 cursor-pointer flex flex-col justify-between space-y-3">
               <div class="flex items-start justify-between">
                 <div>
-                  <span class="text-xs font-bold text-slate-500 dark:text-slate-400">หนังสือราชการรออนุมัติ</span>
+                  <span class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">หนังสือราชการรออนุมัติ</span>
                   <div class="kpi-value text-3xl font-extrabold text-slate-900 dark:text-white mt-1" id="kpiPendingDocs">2</div>
                 </div>
                 <div class="w-11 h-11 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-600 dark:text-amber-400">
@@ -548,7 +522,7 @@
             <div onclick="switchErpTab('studentcare')" class="bento-card bento-card-interactive p-5 cursor-pointer flex flex-col justify-between space-y-3">
               <div class="flex items-start justify-between">
                 <div>
-                  <span class="text-xs font-bold text-slate-500 dark:text-slate-400">อัตราการมาเรียนวันนี้</span>
+                  <span class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">อัตราการมาเรียนวันนี้</span>
                   <div class="kpi-value text-3xl font-extrabold text-slate-900 dark:text-white mt-1" id="kpiAttendanceRate">100%</div>
                 </div>
                 <div class="w-11 h-11 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
@@ -570,7 +544,7 @@
             <div onclick="switchErpTab('academic')" class="bento-card bento-card-interactive p-5 cursor-pointer flex flex-col justify-between space-y-3">
               <div class="flex items-start justify-between">
                 <div>
-                  <span class="text-xs font-bold text-slate-500 dark:text-slate-400">เกรดเฉลี่ยสะสม (GPAX)</span>
+                  <span class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">เกรดเฉลี่ยสะสม (GPAX)</span>
                   <div class="kpi-value text-3xl font-extrabold text-slate-900 dark:text-white mt-1" id="kpiAverageGrade">3.33</div>
                 </div>
                 <div class="w-11 h-11 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400">
@@ -592,7 +566,7 @@
             <div onclick="switchErpTab('vault')" class="bento-card bento-card-interactive p-5 cursor-pointer flex flex-col justify-between space-y-3">
               <div class="flex items-start justify-between">
                 <div>
-                  <span class="text-xs font-bold text-slate-500 dark:text-slate-400">คลังไฟล์ สมศ. & วPA</span>
+                  <span class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">คลังหลักฐาน สมศ. & วPA</span>
                   <div class="kpi-value text-3xl font-extrabold text-slate-900 dark:text-white mt-1" id="kpiVaultSummary">6 ไฟล์</div>
                 </div>
                 <div class="w-11 h-11 rounded-2xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-600 dark:text-teal-400">
@@ -732,7 +706,7 @@
             <div class="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">Multi-Spreadsheet Relational Architecture</span>
-                <h2 class="heading-lg text-slate-900 dark:text-white mt-1.5">สถาปัตยกรรมฐานข้อมูล 3 สเปรดชีตหลัก (7 ตารางมาตรฐาน)</h2>
+                <h2 class="heading-section text-slate-900 dark:text-white mt-1">สถาปัตยกรรมฐานข้อมูล 3 สเปรดชีต (7 ตารางมาตรฐาน)</h2>
                 <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">แยกไฟล์ตามความถี่ในการเขียนข้อมูล ป้องกัน Google Sheets ช้า พร้อมระบบ LockService ป้องกันข้อมูลชนกัน 100%</p>
               </div>
               <button onclick="triggerInitSpreadsheets()" class="btn-interactive px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center gap-2 shadow-md shadow-blue-600/20">
@@ -952,7 +926,7 @@
                   <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">Digital Gradebook & SGS Bridge</span>
                   <span class="text-xs font-mono text-slate-400">รหัสวิชา ว31101 • ชั้น ม.4/1</span>
                 </div>
-                <h2 class="heading-lg text-slate-900 dark:text-white mt-1.5">สมุดบันทึกคะแนนตัดเกรด 8 ระดับ & ประเมินคุณลักษณะอันพึงประสงค์ (ปพ.5)</h2>
+                <h2 class="heading-section text-slate-900 dark:text-white mt-1">สมุดบันทึกคะแนนตัดเกรด 8 ระดับ & วัดผล ปพ.5</h2>
                 <p class="text-xs text-slate-500">ใช้ปุ่มลูกศร ⬆️⬇️⬅️➡️ หรือกด Enter เพื่อเลื่อนช่องกรอกคะแนนเสมือนโปรแกรม Excel คำนวณเกรดอัตโนมัติทันที</p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
@@ -1001,7 +975,7 @@
             <div class="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300">Student Care & Attendance</span>
-                <h2 class="heading-lg text-slate-900 dark:text-white mt-1.5">ระบบดูแลช่วยเหลือนักเรียน • เช็คชื่อ Real-time & พิกัดเยี่ยมบ้าน GPS</h2>
+                <h2 class="heading-section text-slate-900 dark:text-white mt-1">ระบบดูแลช่วยเหลือนักเรียน • เช็คชื่อ Real-time & เยี่ยมบ้าน GPS</h2>
                 <p class="text-xs text-slate-500">คัดกรองนักเรียน 4 กลุ่มอัตโนมัติตามเกณฑ์คะแนนความประพฤติ พร้อมบันทึกพิกัด GPS บ้านนักเรียน</p>
               </div>
               <div class="flex flex-wrap items-center gap-2">
